@@ -12,6 +12,7 @@ export class IngATMsController {
     @UseGuards(AuthGuard('jwt'))
     @Get()
     async findAll() {
+        console.log("findAll");
         // get atm list 
         const atmList = await this.ingATMsService.findAll();
         return atmList;
@@ -28,14 +29,8 @@ export class IngATMsController {
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     async update(@Param('id') id: number, @Body() ingATM: IngATMDto): Promise<IngATMEntity> {
-        // get the number of row affected and the updated ATM record
-        const { numberOfAffectedRows, updatedATM } = await this.ingATMsService.update(id, ingATM);
-
-        // if the number of row affected is zero, it means the record doesn't exist in our db
-        if (numberOfAffectedRows === 0) {
-            throw new NotFoundException('This ATM doesn\'t exist');
-        }
-
+        // get the updated ATM record
+        const { updatedATM } = await this.ingATMsService.update(id, ingATM);
         // return the updated ATM data
         return updatedATM;
     }

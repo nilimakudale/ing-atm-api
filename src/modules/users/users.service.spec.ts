@@ -1,77 +1,59 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
-
 import { UsersService } from './users.service';
+import { usersProviders } from './users.providers';
 
-class ApiServiceMock {
-  create(user: UserDto) {
-     return {};
-  }
-  findOneByEmail(email: string) {
-    return {
-      id:1,
-      name: "test",
-      email:"test@gmail.com",
-      password : "test"
-    };
-  }
-  findOneById(id: number) {
-    return {};
-  }
-
-  getUser(_firstName: string, _lastName: string) {
-    return {
-      name: 'Jane Doe',
-    };
-  }
-
-}
+export type MockType<T> = {
+  [P in keyof T]?: jest.Mock<{}>;
+};
 
 describe('UsersService', () => {
-  let service: UsersService;
+  let spyService: UsersService;
+  let repositoryMock: MockType<typeof User>;
+  const result = {
+    id:1,
+    name: "test",
+    email:"test@gmail.com",
+    password : "test"
+  };
 
   beforeAll(async () => {
     const ApiServiceProvider = {
-      provide: UsersService,
-      useClass: ApiServiceMock,
+      provide: getRepositoryToken(User),
+      useFactory: () => ({
+        findOne: jest.fn(email => result),
+        findAll: jest.fn(() => []),
+        findOneById: jest.fn((id:number) => result),
+      })
     }
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService, ApiServiceProvider
-      ],
+    const app: TestingModule = await Test.createTestingModule({
+      providers: [...usersProviders, UsersService, ApiServiceProvider],
     }).compile();
-    service = module.get<UsersService>(UsersService);
+
+    spyService = app.get<UsersService>(UsersService);
+    repositoryMock = app.get(getRepositoryToken(User));
   })
 
-  // beforeEach(async () => {
-  //   const module: TestingModule = await Test.createTestingModule({
-  //     providers: [
-  //       UsersService,{
-  //       provide: UsersService,
-  //       useValue: {},
-  //       }
-  //     ],
-  //   }).compile();
-
-  //   service = module.get<UsersService>(UsersService);
-  // });
-
-
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should return user by id',async () => {
+    repositoryMock.findOne.mockReturnValue(result);
+    const data = await spyService.findOneById(result.id);
+    expect(repositoryMock.findOne).toHaveBeenCalledWith(result.id);
+    expect(data).toEqual(result);
   });
 
   it('should return user by email',async () => {
-    const result = {
-      id:1,
-      name: "test",
-      email:"test@gmail.com",
-      password : "test"
-    };
-    const data = await service.findOneByEmail('test@gmail.com');
+    repositoryMock.findOne.mockReturnValue(result);
+    const data = await spyService.findOneByEmail(result.email);
+    expect(repositoryMock.findOne).toHaveBeenCalledWith(result.email);
     expect(data).toEqual(result);
+  });
+
+  it('should create user',async () => {
+    repositoryMock.findOne.mockReturnValue(result);
+    const data = await spyService.create(result);
+    expect(repositoryMock.create).toHaveBeenCalledWith(result);
   });
 
 });

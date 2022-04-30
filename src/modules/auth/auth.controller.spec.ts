@@ -14,6 +14,7 @@ describe('Auth Controller', () => {
       useFactory: () => ({
         login: jest.fn(() => {}),
         create: jest.fn(() => {}),
+        signUp: jest.fn(() => {}),
       })
     }
 
@@ -50,6 +51,12 @@ describe('Auth Controller', () => {
     let loginReq = {username:'',password:''};
     expect(controller.login(loginReq)).not.toEqual(null);
     expect(spyService.login).toHaveBeenCalled();
+  })
+
+  it("calling signup method", () => {
+    let loginReq = {email:'',password:'',name:''};
+    expect(controller.signUp(loginReq)).not.toEqual(null);
+    expect(spyService.create).toHaveBeenCalled();
   })
 
   it('should be defined', () => {
