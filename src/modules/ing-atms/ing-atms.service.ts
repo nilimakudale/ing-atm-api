@@ -1,12 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
-
 import { IngATM } from './ing-atm.entity';
 import { IngATMDto } from './dto/ing-atm.dto';
 import { ING_ATM_REPOSITORY } from '../../core/constants';
+import { Repository } from 'sequelize-typescript';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class IngATMsService {
-    constructor(@Inject(ING_ATM_REPOSITORY) private readonly angAtmRepository: typeof IngATM) { }
+    constructor(@InjectModel(IngATM) private readonly angAtmRepository: Repository<IngATM>) { }
 
     async create(ingATM: IngATMDto): Promise<IngATM> {
         return await this.angAtmRepository.create<IngATM>(ingATM);

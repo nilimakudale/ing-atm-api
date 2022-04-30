@@ -6,38 +6,40 @@ import { IngATM } from './ing-atm.entity';
 import { MockType } from '../users/users.service.spec';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { angATMsProviders } from './ing-atms.providers';
+import { getModelToken } from '@nestjs/sequelize';
 
-const result =  {
+const result = {
   "id": 1,
   "name": "test1",
   "street": "street1",
   "city": "pune",
   "geoLocation": {
-      "lat": "52.60022",
-      "lng": "4.703054"
+    "lat": "52.60022",
+    "lng": "4.703054"
   }
 }
 
+const mockRepository = {
+  findOne: jest.fn(email => result),
+  findAll: jest.fn(() => {}),
+  findOneById: jest.fn((id: number) => result),
+  create: jest.fn(() => {}),
+  update: jest.fn(() => {}),
+  delete : jest.fn(() => {}),
+}
 describe('IngATMsService', () => {
- // let spyService: IngATMsService;
   let spyService: IngATMsService;
-  let repositoryMock: MockType<typeof IngATM>;
+  let repositoryMock;
 
   beforeAll(async () => {
-    const ApiServiceProvider = {
-      provide: getRepositoryToken(IngATM),
-      useFactory: () => ({
-        findOne: jest.fn(email => result),
-        findAll: jest.fn(() => []),
-        findOneById: jest.fn((id:number) => result),
-      })
-    }
-    const app: TestingModule = await Test.createTestingModule({
-      providers: [...angATMsProviders, IngATMsService, ApiServiceProvider],
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [IngATMsService, {
+        provide: getModelToken(IngATM),
+        useValue: mockRepository}],
     }).compile();
 
-    spyService = app.get<IngATMsService>(IngATMsService);
-    repositoryMock = app.get(getRepositoryToken(IngATM));
+    spyService = module.get<IngATMsService>(IngATMsService);
+    repositoryMock = module.get<typeof IngATM>(getModelToken(IngATM));
   })
 
   it('should be defined', () => {
@@ -48,7 +50,7 @@ describe('IngATMsService', () => {
     const createSpy = jest.spyOn(spyService, 'create');
     const dto = new IngATMDto();
     //spyService.create(dto);
-    expect(await spyService.create(dto)).not.toEqual(null);
+    expect(spyService.create(dto)).not.toEqual(null);
     expect(createSpy).toHaveBeenCalledWith(dto);
   });
 
@@ -62,7 +64,7 @@ describe('IngATMsService', () => {
     const updateNoteSpy = jest.spyOn(spyService, 'update');
     const id = 'testId';
     const dto = new IngATMDto();
-    const resp = await spyService.update(id, dto);
+    const resp = spyService.update(id, dto);
     expect(updateNoteSpy).toHaveBeenCalledWith(id, dto);
     expect(resp).toBeTruthy()
   });
@@ -76,8 +78,8 @@ describe('IngATMsService', () => {
 
   it('should return ATM by id',async () => {
     repositoryMock.findOne.mockReturnValue(result);
-    const data = await spyService.findOne(result.id);
-    expect(repositoryMock.findOne).toHaveBeenCalledWith(result.id);
+    const data = spyService.findOne(result.id);
+    expect(repositoryMock.findOne).toHaveBeenCalledWith({"where": {"id":result.id}});
   });
 
 
