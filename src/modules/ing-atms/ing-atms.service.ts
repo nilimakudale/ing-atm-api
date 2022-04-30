@@ -9,7 +9,7 @@ export class IngATMsService {
     constructor(@Inject(ING_ATM_REPOSITORY) private readonly angAtmRepository: typeof IngATM) { }
 
     async create(ingATM: IngATMDto): Promise<IngATM> {
-        return await this.angAtmRepository.create<IngATM>({ ...ingATM });
+        return await this.angAtmRepository.create<IngATM>(ingATM);
     }
 
     async findAll(): Promise<IngATM[]> {

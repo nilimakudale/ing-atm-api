@@ -10,6 +10,11 @@ Application Features:
 
 ## How to build and deploy application
 
+Installation:
+```text
+npm install 
+```
+
 Command to build application:
 
 ```text
@@ -46,10 +51,6 @@ Login by auth/login api - with request data :
  in response will get access token to access other APIs.
 
 
-## Swagger
-
-Where to find specification src/main/webapp/specs [http://localhost:8080/atm-locator/specs/swagger.json](http://localhost:8080/atm-locator/specs/swagger.json)
-
 ## Swagger UI
 
-http://localhost:8080/atm-locator/swagger-ui/
+http://localhost:3000/api/#/
