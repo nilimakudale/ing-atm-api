@@ -1,6 +1,5 @@
-# ATM Locator - HTTP REST API for searching ING bank ATM
+# REST api to CRUD ING ATMs
 
-REST api to create a list of ING ATMs. 
 
 Application Features:
 
