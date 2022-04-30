@@ -31,14 +31,6 @@ describe('Auth Controller', () => {
         UsersService,
         ApiServiceProvider,
         UsersServiceProvider
-        // {
-        //   provide: AuthService,
-        //   useValue: {},
-        // },
-        // {
-        //   provide: UsersService,
-        //   useValue: {},
-        // }
       ],
       controllers: [AuthController],
     }).compile();
