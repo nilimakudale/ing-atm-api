@@ -1,0 +1,3 @@
+service: ing-atm-apis
+runtime: nodejs14
+
