@@ -6,7 +6,7 @@ import { IngATM as IngATMEntity } from './ing-atm.entity';
 import { IngATMDto } from './dto/ing-atm.dto';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-@ApiTags('ingATMs')
+@ApiTags('ING ATMs CRUD')
 
 @Controller('ingATMs')
 export class IngATMsController {

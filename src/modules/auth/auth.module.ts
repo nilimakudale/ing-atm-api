@@ -6,8 +6,6 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './jwt.strategy';
 import { JWTKEY, TOKEN_EXPIRATION } from '../../common/constants';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 @Module({
   imports: [

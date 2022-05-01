@@ -15,7 +15,6 @@ async function bootstrap() {
   //Swagger API documentation configuration
   const config = new DocumentBuilder()
     .setTitle('ING ATMs APIs')
-    .setDescription('CRUD APIs')
     .setVersion('1.0')
     .addTag('ING ATMs')
     .build();

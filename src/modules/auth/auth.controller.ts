@@ -7,7 +7,7 @@ import { UserLoginDto } from '../users/dto/user-login.dto';
 import { UsersService } from '../users/users.service';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('auth')
+@ApiTags('Auth APIs')
 
 @Controller('auth')
 export class AuthController {
