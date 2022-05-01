@@ -51,7 +51,6 @@ describe('Auth Controller', () => {
     let loginReq = {email:'',password:'',name:''};
     expect(controller.signUp(loginReq)).not.toEqual(null);
     expect(userService.findOneByEmail).toHaveBeenCalled();
-   // expect(spyService.create).toHaveBeenCalled();
   })
 
   it('should be defined', () => {

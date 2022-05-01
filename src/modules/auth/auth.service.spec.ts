@@ -10,8 +10,8 @@ describe('AuthService', () => {
   let jwtService: JwtService;
 
   const testUser = {
-    email: 'test@gmail.com',
-    password: '123',
+    email: 'nilima2@gmail.com',
+    password: 'n1l1ma2',
     name: 'test'
   };
 
@@ -19,6 +19,9 @@ describe('AuthService', () => {
     provide: JwtService,
     useFactory: () => ({
       signAsync: jest.fn(() => { }),
+      validateUser: jest.fn((userName, password) => testUser),
+      login: jest.fn(() => { }),
+      generateToken : jest.fn(() => { }),
     })
   }
 
@@ -30,7 +33,7 @@ describe('AuthService', () => {
         return testUser; 
         else return null; 
       }),
-      create: jest.fn(() => { return testUser }),
+      create: jest.fn(() => { return  testUser }),
     })
   }
 
@@ -65,13 +68,15 @@ describe('AuthService', () => {
     expect(data).toEqual(null);
   });
 
-  it("should generate token", () => {
-    authService.login({})
-    expect(jwtService.signAsync).toHaveBeenCalled();
+  it("should generate token", async() => {
+    const data = authService.login({username:testUser.email, password: testUser.password});
+    expect(authService.validateUser(testUser.email,testUser.password)).toBeDefined();
+    expect(data).toBeDefined();
+   // expect(authService.generateToken).toBeDefined();
   })
 
   it("create new user and generate token", async() => {
-    const data = authService.create(testUser);
+    const data = await authService.create(testUser);
     expect(data).toBeDefined();
   })
 

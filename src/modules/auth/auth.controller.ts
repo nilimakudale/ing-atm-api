@@ -1,4 +1,4 @@
-import { Controller, Body, Post, UseGuards, ForbiddenException } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards, ForbiddenException, Request, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
@@ -11,7 +11,6 @@ export class AuthController {
     constructor(private authService: AuthService,
         private readonly userService: UsersService) { }
 
-    @UseGuards(AuthGuard('local'))
     @Post('login')
     async login(@Body() loginReq: UserLoginDto) {
         return await this.authService.login(loginReq);
