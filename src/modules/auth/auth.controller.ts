@@ -2,7 +2,7 @@ import { Controller, Body, Post, UseGuards, ForbiddenException } from '@nestjs/c
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
-import { UserDto } from '../users/dto/user.dto';
+import { CreateUserDto } from '../users/dto/user.dto';
 import { UserLoginDto } from '../users/dto/user-login.dto';
 import { UsersService } from '../users/users.service';
 
@@ -18,11 +18,11 @@ export class AuthController {
     }
 
     @Post('signup')
-    async signUp(@Body() user: UserDto) {
+    async signUp(@Body() user: CreateUserDto) {
         const userExist = await this.userService.findOneByEmail(user.email);
         if (userExist) {
             throw new ForbiddenException('This email already exist');
-        }else{
+        } else {
             return await this.authService.create(user);
         }
     }

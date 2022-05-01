@@ -12,7 +12,6 @@ export class IngATMsController {
     @UseGuards(AuthGuard('jwt'))
     @Get()
     async findAll() {
-        console.log("findAll");
         // get atm list 
         const atmList = await this.ingATMsService.findAll();
         return atmList;

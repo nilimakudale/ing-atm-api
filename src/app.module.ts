@@ -17,7 +17,8 @@ import { Dialect } from 'sequelize/types';
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT) || 5432,
       dialect: process.env.DB_DIALECT as Dialect || 'postgres',
-      autoLoadModels: true
+      autoLoadModels: true,
+      synchronize: true
     }),
     UsersModule,
     AuthModule,
