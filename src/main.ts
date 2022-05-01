@@ -5,8 +5,11 @@ import { ValidateInputPipe } from './core/pipes/validate.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  //Enable CORS
   app.enableCors();
 
+  //Swagger API documentation configuration
   const config = new DocumentBuilder()
     .setTitle('ING ATMs APIs')
     .setDescription('CRUD APIs')
@@ -18,6 +21,7 @@ async function bootstrap() {
 
   // handle all user input validation globally
   app.useGlobalPipes(new ValidateInputPipe());
-  await app.listen(process.env.PORT);
+
+  await app.listen(parseInt(process.env.DB_PORT) || 3000);
 }
 bootstrap();

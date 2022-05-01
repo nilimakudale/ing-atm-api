@@ -15,10 +15,9 @@ import { Dialect } from 'sequelize/types';
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT) || 3000,
+      port: parseInt(process.env.DB_PORT) || 5432,
       dialect: process.env.DB_DIALECT as Dialect || 'postgres',
-      autoLoadModels: true,
-      synchronize: true,
+      autoLoadModels: true
     }),
     UsersModule,
     AuthModule,

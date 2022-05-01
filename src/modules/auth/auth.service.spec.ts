@@ -61,8 +61,8 @@ describe('AuthService', () => {
   });
 
   it('should validate user test with invalid user', async () => {
-    const data = authService.validateUser('bchdb', testUser.password);
-    expect(userService.findOneByEmail('sbchsabv')).toHaveBeenCalled();
+    const data = await authService.validateUser('bchdb', testUser.password);
+    expect(data).toEqual(null);
   });
 
   it("should generate token", () => {
@@ -70,9 +70,9 @@ describe('AuthService', () => {
     expect(jwtService.signAsync).toHaveBeenCalled();
   })
 
-  it("create new user and generate token", () => {
-    authService.create(testUser);
-    expect(userService.create).toHaveBeenCalled();
+  it("create new user and generate token", async() => {
+    const data = authService.create(testUser);
+    expect(data).toBeDefined();
   })
 
 });

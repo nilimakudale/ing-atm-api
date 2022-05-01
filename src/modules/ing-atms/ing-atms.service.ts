@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IngATM } from './ing-atm.entity';
 import { IngATMDto } from './dto/ing-atm.dto';
-import { ING_ATM_REPOSITORY } from '../../core/constants';
 import { Repository } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
 

@@ -16,7 +16,18 @@ export class IngATM extends Model<IngATM> {
         allowNull: false,
     })
     name: string;
-
+    @Column({
+        type: DataType.STRING,
+    })
+    country: string;
+    @Column({
+        type: DataType.STRING,
+    })
+    zipCode: string;
+    @Column({
+        type: DataType.STRING,
+    })
+    state: string;
     @Column({
         type: DataType.STRING,
     })

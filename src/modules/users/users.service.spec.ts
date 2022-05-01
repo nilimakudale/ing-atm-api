@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken, getConnectionToken } from '@nestjs/sequelize';
-import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { usersProviders } from './users.providers';
 
 export type MockType<T> = {
   [P in keyof T]?: jest.Mock<{}>;

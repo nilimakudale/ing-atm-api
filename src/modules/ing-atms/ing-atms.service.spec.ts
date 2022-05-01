@@ -3,9 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IngATMsService } from './ing-atms.service';
 import { IngATMDto } from './dto/ing-atm.dto';
 import { IngATM } from './ing-atm.entity';
-import { MockType } from '../users/users.service.spec';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { angATMsProviders } from './ing-atms.providers';
 import { getModelToken } from '@nestjs/sequelize';
 
 const result = {

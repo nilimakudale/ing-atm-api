@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 describe('Auth Controller', () => {
   let controller: AuthController;
   let spyService: AuthService;
+  let userService: UsersService;
 
   beforeEach(async () => {
     const ApiServiceProvider = {
@@ -37,6 +38,7 @@ describe('Auth Controller', () => {
 
     controller = module.get<AuthController>(AuthController);
     spyService = module.get<AuthService>(AuthService);
+    userService =  module.get<UsersService>(UsersService);
   });
 
   it("calling login method", () => {
@@ -48,7 +50,8 @@ describe('Auth Controller', () => {
   it("calling signup method", () => {
     let loginReq = {email:'',password:'',name:''};
     expect(controller.signUp(loginReq)).not.toEqual(null);
-    expect(spyService.create).toHaveBeenCalled();
+    expect(userService.findOneByEmail).toHaveBeenCalled();
+   // expect(spyService.create).toHaveBeenCalled();
   })
 
   it('should be defined', () => {
