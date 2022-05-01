@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { IngATMsModule } from './modules/ing-atms/ing-atms.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize/types';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Dialect } from 'sequelize/types';
     UsersModule,
     AuthModule,
     IngATMsModule
-  ]
+  ],
+  providers: [AppService],
 })
 export class AppModule { }

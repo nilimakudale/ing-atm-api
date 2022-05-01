@@ -24,6 +24,7 @@ async function bootstrap() {
   // handle all user input validation globally
   app.useGlobalPipes(new ValidationPipe());
   const APP_PORT = parseInt(process.env.PORT) || PORT;
-  await app.listen(PORT, ()=>{console.log("Running on port",APP_PORT)});
+  await app.listen(APP_PORT, ()=>{console.log("Running on port",APP_PORT)});
+
 }
 bootstrap();
