@@ -2,6 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as dotenv from 'dotenv';
+import { PORT } from './common/constants';
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +24,7 @@ async function bootstrap() {
 
   // handle all user input validation globally
   app.useGlobalPipes(new ValidationPipe());
-  const PORT = parseInt(process.env.PORT) || 3000;
-  await app.listen(PORT, ()=>{console.log("Running on port",PORT)});
+  const APP_PORT = parseInt(process.env.PORT) || PORT;
+  await app.listen(PORT, ()=>{console.log("Running on port",APP_PORT)});
 }
 bootstrap();

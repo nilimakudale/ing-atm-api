@@ -15,13 +15,10 @@ describe('AuthService', () => {
     name: 'test'
   };
 
-  const ApiServiceProvider = {
+  const JWTServiceProvider = {
     provide: JwtService,
     useFactory: () => ({
       signAsync: jest.fn(() => { }),
-      validateUser: jest.fn((userName, password) => testUser),
-      login: jest.fn(() => { }),
-      generateToken : jest.fn(() => { }),
     })
   }
 
@@ -33,7 +30,7 @@ describe('AuthService', () => {
         return testUser; 
         else return null; 
       }),
-      create: jest.fn(() => { return  testUser }),
+      create: jest.fn(() => { return  {dataValues:testUser}}),
     })
   }
 
@@ -43,7 +40,7 @@ describe('AuthService', () => {
         UsersService,
         JwtService,
         AuthService,
-        ApiServiceProvider,
+        JWTServiceProvider,
         UsersServiceProvider
       ],
     }).compile();
@@ -68,14 +65,13 @@ describe('AuthService', () => {
     expect(data).toEqual(null);
   });
 
-  it("should generate token", async() => {
-    const data = authService.login({username:testUser.email, password: testUser.password});
+  it("should generate token(login)", async() => {
+    const data =await authService.login({username:testUser.email, password: testUser.password});
     expect(authService.validateUser(testUser.email,testUser.password)).toBeDefined();
     expect(data).toBeDefined();
-   // expect(authService.generateToken).toBeDefined();
   })
 
-  it("create new user and generate token", async() => {
+  it("create new user and generate token(signup)", async() => {
     const data = await authService.create(testUser);
     expect(data).toBeDefined();
   })
