@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
 
@@ -26,12 +27,21 @@ describe('Auth Controller', () => {
       })
     }
 
+    const loggerServiceProvider = {
+      provide: Logger,
+      useFactory: () => ({
+        log: jest.fn(() => { }),
+        error: jest.fn(() => { }),
+      })
+    }
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         UsersService,
         ApiServiceProvider,
-        UsersServiceProvider
+        UsersServiceProvider,
+        loggerServiceProvider
       ],
       controllers: [AuthController],
     }).compile();

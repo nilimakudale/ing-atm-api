@@ -3,12 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IngATMsController } from './ing-atms.controller';
 import { IngATMsService } from './ing-atms.service';
 import { IngATMDto } from './dto/ing-atm.dto';
+import { Logger } from '@nestjs/common';
 
 describe('IngATMs Controller', () => {
   let ingATMsController: IngATMsController;
   let spyService: IngATMsService;
   beforeAll(async () => {
-    const ApiServiceProvider = {
+    
+    const apiServiceProvider = {
       provide: IngATMsService,
       useFactory: () => ({
         create: jest.fn(() => []),
@@ -17,9 +19,17 @@ describe('IngATMs Controller', () => {
         delete: jest.fn(() => { })
       })
     }
+    const loggerServiceProvider = {
+      provide: Logger,
+      useFactory: () => ({
+        log: jest.fn(() => { }),
+        error: jest.fn(() => { }),
+      })
+    }
+
     const app: TestingModule = await Test.createTestingModule({
       controllers: [IngATMsController],
-      providers: [IngATMsService, ApiServiceProvider],
+      providers: [IngATMsService, apiServiceProvider, loggerServiceProvider],
     }).compile();
 
     ingATMsController = app.get<IngATMsController>(IngATMsController);

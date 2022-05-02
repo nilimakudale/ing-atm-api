@@ -1,4 +1,4 @@
-import { Controller, Body, Post, ForbiddenException } from '@nestjs/common';
+import { Controller, Body, Post, ForbiddenException, LoggerService, Logger, Inject } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/user.dto';
 import { UserLoginDto } from '../users/dto/user-login.dto';
@@ -9,8 +9,10 @@ import { ApiBadRequestResponse, ApiForbiddenResponse, ApiInternalServerErrorResp
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService,
-        private readonly userService: UsersService) { }
+    constructor(
+        @Inject(Logger) private logger: LoggerService,
+        private authService: AuthService,
+        private userService: UsersService) { }
 
     @Post('login')
     @ApiOkResponse({ description: 'Login successful' })
@@ -18,7 +20,13 @@ export class AuthController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
     async login(@Body() loginReq: UserLoginDto) {
-        return await this.authService.login(loginReq);
+        this.logger.log(`AuthController Login(): username:${loginReq.username}, password:${loginReq.password}`);
+        try {
+            return await this.authService.login(loginReq);
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
+        }
     }
 
     @Post('signup')
@@ -27,11 +35,17 @@ export class AuthController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
     async signUp(@Body() user: CreateUserDto) {
-        const userExist = await this.userService.findOneByEmail(user.email);
-        if (userExist) {
-            throw new ForbiddenException('This email already exist');
-        } else {
-            return await this.authService.create(user);
+        this.logger.log(`AuthController signup(): user: ${JSON.stringify(user)}`);
+        try {
+            const userExist = await this.userService.findOneByEmail(user.email);
+            if (userExist) {
+                throw new ForbiddenException('This email already exist');
+            } else {
+                return await this.authService.create(user);
+            }
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
         }
     }
 }

@@ -4,6 +4,7 @@ import { IngATMsService } from './ing-atms.service';
 import { IngATMDto } from './dto/ing-atm.dto';
 import { IngATM } from './ing-atm.entity';
 import { getModelToken } from '@nestjs/sequelize';
+import { Logger } from '@nestjs/common';
 
 const result = {
   "id": 1,
@@ -24,13 +25,21 @@ const mockRepository = {
   update: jest.fn(() => {}),
   delete : jest.fn(() => {}),
 }
+const loggerServiceProvider = {
+  provide: Logger,
+  useFactory: () => ({
+    log: jest.fn(() => { }),
+    error: jest.fn(() => { }),
+  })
+}
+
 describe('IngATMsService', () => {
   let spyService: IngATMsService;
   let repositoryMock;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [IngATMsService, {
+      providers: [IngATMsService, loggerServiceProvider, {
         provide: getModelToken(IngATM),
         useValue: mockRepository}],
     }).compile();

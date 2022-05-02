@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
@@ -22,7 +23,7 @@ describe('AuthService', () => {
     })
   }
 
-  const UsersServiceProvider = {
+  const usersServiceProvider = {
     provide: UsersService,
     useFactory: () => ({
       findOneByEmail: jest.fn((email) => { 
@@ -34,6 +35,14 @@ describe('AuthService', () => {
     })
   }
 
+  const loggerServiceProvider = {
+    provide: Logger,
+    useFactory: () => ({
+      log: jest.fn(() => { }),
+      error: jest.fn(() => { }),
+    })
+  }
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -41,7 +50,8 @@ describe('AuthService', () => {
         JwtService,
         AuthService,
         JWTServiceProvider,
-        UsersServiceProvider
+        usersServiceProvider,
+        loggerServiceProvider
       ],
     }).compile();
 

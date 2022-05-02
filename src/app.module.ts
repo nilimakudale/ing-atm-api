@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -24,6 +24,6 @@ import { AppService } from './app.service';
     AuthModule,
     IngATMsModule
   ],
-  providers: [AppService],
+  providers: [AppService, Logger],
 })
 export class AppModule { }

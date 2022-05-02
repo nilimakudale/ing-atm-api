@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, UseGuards, Logger, LoggerService, Inject } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { IngATMsService } from './ing-atms.service';
@@ -10,69 +10,93 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenR
 
 @Controller('ingATMs')
 export class IngATMsController {
-    constructor(private readonly ingATMsService: IngATMsService) { }
+    constructor(
+        @Inject(Logger) private readonly logger: LoggerService,
+        private readonly ingATMsService: IngATMsService) { }
 
     @UseGuards(AuthGuard('jwt'))
     @Get()
-    @ApiBearerAuth()
+    @ApiBearerAuth('access-token')
     @ApiOkResponse({ description: 'Fetched records successfully' })
-    @ApiUnauthorizedResponse({description: 'Unauthorized Access'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized Access' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async findAll() {
-        // get atm list 
-        const atmList = await this.ingATMsService.findAll();
-        return atmList;
+        this.logger.log(`In findAllATMs()...`);
+        try {
+            // get atm list 
+            const atmList = await this.ingATMsService.findAll();
+            return atmList;
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
+        }
     }
 
 
     @UseGuards(AuthGuard('jwt'))
     @Post()
-    @ApiBearerAuth()
+    @ApiBearerAuth('access-token')
     @ApiCreatedResponse({ description: 'New ATM record added' })
-    @ApiUnauthorizedResponse({description: 'Unauthorized Access'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized Access' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async create(@Body() ingATM: IngATMDto): Promise<IngATMEntity> {
-        // create a new ATM record
-        return await this.ingATMsService.create(ingATM);
+        this.logger.log(`In createATM()...`);
+        try {
+            // create a new ATM record
+            return await this.ingATMsService.create(ingATM);
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
-    @ApiBearerAuth()
+    @ApiBearerAuth('access-token')
     @ApiOkResponse({ description: 'Updated record successfully' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiUnauthorizedResponse({description: 'Unauthorized Access'})
-    @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized Access' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async update(@Param('id') id: number, @Body() ingATM: IngATMDto): Promise<IngATMEntity> {
-        // get the updated ATM record
-        const { updatedATM } = await this.ingATMsService.update(id, ingATM);
-        // return the updated ATM data
-        return updatedATM;
+        this.logger.log(`In updateATM()...id=${id}`);
+        try {
+            // get the updated ATM record
+            const { updatedATM } = await this.ingATMsService.update(id, ingATM);
+            // return the updated ATM data
+            return updatedATM;
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
-    @ApiBearerAuth()
+    @ApiBearerAuth('access-token')
     @ApiOkResponse({ description: 'Deleted record successfully' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiUnauthorizedResponse({description: 'Unauthorized Access'})
-    @ApiInternalServerErrorResponse({ description: 'Internal Server Error ' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized Access' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async remove(@Param('id') id: number) {
-        // delete the ATM with this id
-        const deleted = await this.ingATMsService.delete(id);
-
-        // if the number of row affected is zero, then the ATM doesn't exist in our db
-        if (deleted === 0) {
-            throw new NotFoundException('This ATM doesn\'t exist');
+        this.logger.log(`In removeATM()...id=${id}`);
+        try {
+            // delete the ATM with this id
+            const deleted = await this.ingATMsService.delete(id);
+            // if the number of row affected is zero, then the ATM doesn't exist in our db
+            if (deleted === 0) {
+                throw new NotFoundException('This ATM doesn\'t exist');
+            }
+            // return success message
+            return 'Successfully deleted';
+        } catch (error) {
+            this.logger.error(error);
+            throw error;
         }
-
-        // return success message
-        return 'Successfully deleted';
     }
 }
