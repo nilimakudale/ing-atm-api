@@ -1,14 +1,3 @@
-service: test-ing-atm-apis-v1
+service: test-ing-atm-apis-v3
 runtime: nodejs14
-env_variables:
-  PORT: 3000
-  DB_HOST: '/cloudsql/knowtify-uat:asia-south1:test-ing-atm-sql-instance'
-  DB_PORT: 5432
-  DB_USER: 'postgres'
-  DB_PASS: 'postgres@123'
-  DB_DIALECT: 'postgres'
-  DB_NAME: 'test-ing-atm-db'
-  JWTKEY: '4t7uierghfvbhr3yt74tgrvuhrbvjh'
-  TOKEN_EXPIRATION: '48h'
-  BEARER: 'Bearer'
-  NODE_ENV: 'production'
+
